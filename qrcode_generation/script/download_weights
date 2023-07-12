@@ -12,7 +12,7 @@ from predict import CACHE_DIR
 
 with tempfile.TemporaryDirectory() as temp_dir:
     lora = diffusers.LORAModel.from_pretrained(
-        "monster-labs/lora_v1p_sd15_qrcode_monster", torch_dtype=torch.float16, cache_dir=temp_dir
+        "DionTimmer/controlnet_qrcode-control_v1p_sd15", torch_dtype=torch.float16, cache_dir=temp_dir
     )
 
     controlnet = diffusers.ControlNetModel.from_pretrained(
