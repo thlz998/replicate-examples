@@ -2,7 +2,6 @@ from typing import List
 
 import torch
 import time
-import cog
 from cog import BasePredictor, Input, Path
 from diffusers import StableDiffusionControlNetImg2ImgPipeline
 

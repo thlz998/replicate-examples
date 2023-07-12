@@ -12,9 +12,6 @@ from predict import CACHE_DIR
 
 with tempfile.TemporaryDirectory() as temp_dir:
     login(token="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")
-    # lora = diffusers.LORAModel.from_pretrained(
-    #     "DionTimmer/controlnet_qrcode-control_v1p_sd15", torch_dtype=torch.float16, cache_dir=temp_dir
-    # )
 
     controlnet = diffusers.ControlNetModel.from_pretrained(
         # "monster-labs/control_v1p_sd15_qrcode_monster", torch_dtype=torch.float16, cache_dir=temp_dir
@@ -22,7 +19,8 @@ with tempfile.TemporaryDirectory() as temp_dir:
         # "DionTimmer/controlnet_qrcode-control_v1p_sd15", torch_dtype=torch.float16, cache_dir=temp_dir
     )
     pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
-        "runwayml/stable-diffusion-v1-5",
+        "drnighthan/GhostMix",
+        # "runwayml/stable-diffusion-v1-5",
         controlnet=controlnet,
         safety_checker=None,
         torch_dtype=torch.float16,
