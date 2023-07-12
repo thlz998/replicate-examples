@@ -61,7 +61,7 @@ class Predictor(BasePredictor):
         self,
         prompt: str = Input(description="QR Code Prompt"),
         # qr_code_content: str = Input(description="二维码内容"),
-        qr_code_content: Path = Path(description="上传二维码", type=Path, default="https://dl-1257240317.cos.ap-guangzhou.myqcloud.com/k0a1a/test-qrcode.png"),
+        qr_code_content: str = Input(description="二维码URL", default="https://dl-1257240317.cos.ap-guangzhou.myqcloud.com/k0a1a/test-qrcode.png"),
         negative_prompt: str = Input(
             description="反向提示词",
             default="ugly, disfigured, low quality, blurry, nsfw",
