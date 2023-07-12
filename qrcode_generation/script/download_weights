@@ -11,9 +11,9 @@ sys.path.append(".")
 from predict import CACHE_DIR
 
 with tempfile.TemporaryDirectory() as temp_dir:
-    lora = diffusers.LORAModel.from_pretrained(
-        "DionTimmer/controlnet_qrcode-control_v1p_sd15", torch_dtype=torch.float16, cache_dir=temp_dir
-    )
+    # lora = diffusers.LORAModel.from_pretrained(
+    #     "DionTimmer/controlnet_qrcode-control_v1p_sd15", torch_dtype=torch.float16, cache_dir=temp_dir
+    # )
 
     controlnet = diffusers.ControlNetModel.from_pretrained(
         "monster-labs/control_v1p_sd15_qrcode_monster", torch_dtype=torch.float16, cache_dir=temp_dir
@@ -25,7 +25,7 @@ with tempfile.TemporaryDirectory() as temp_dir:
         safety_checker=None,
         torch_dtype=torch.float16,
         cache_dir=temp_dir,
-        lora=lora,
+        # lora=lora,
     )
     pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
         pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=temp_dir
