@@ -18,7 +18,7 @@ with tempfile.TemporaryDirectory() as temp_dir:
         "Nacholmo/controlnet-qr-pattern", torch_dtype=torch.float16, cache_dir=temp_dir
         # "DionTimmer/controlnet_qrcode-control_v1p_sd15", torch_dtype=torch.float16, cache_dir=temp_dir
     )
-    pipe2 = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
+    pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
         "stablediffusionapi/ghostmix",
         # "runwayml/stable-diffusion-v1-5",
         controlnet=controlnet,
@@ -27,7 +27,8 @@ with tempfile.TemporaryDirectory() as temp_dir:
         cache_dir=temp_dir,
         # lora=lora,
     )
-    pipe2.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
-        pipe2.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=temp_dir
+    pipe.unet.load_attn_procs("monster-labs/attention_proc_v1p_sd15_qrcode_monster", cache_dir=temp_dir)
+    pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
+        pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=temp_dir
     )
-    pipe2.save_pretrained(CACHE_DIR, safe_serialization=True)
+    pipe.save_pretrained(CACHE_DIR, safe_serialization=True)
