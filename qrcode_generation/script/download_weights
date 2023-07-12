@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import tempfile
-
+from huggingface_hub import login
 import diffusers
 import torch
 
@@ -11,6 +11,7 @@ sys.path.append(".")
 from predict import CACHE_DIR
 
 with tempfile.TemporaryDirectory() as temp_dir:
+    login(token="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")
     # lora = diffusers.LORAModel.from_pretrained(
     #     "DionTimmer/controlnet_qrcode-control_v1p_sd15", torch_dtype=torch.float16, cache_dir=temp_dir
     # )
