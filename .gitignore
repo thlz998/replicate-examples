@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 
 qrcode_generation/weights-cache/
+
+qrcode_generation/output*.png
