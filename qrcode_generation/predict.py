@@ -89,6 +89,9 @@ class Predictor(BasePredictor):
     ) -> List[Path]:
         seed = torch.randint(0, 2**32, (1,)).item() if seed == -1 else seed
         qrcode_image = self.generate_qrcode(qr_code_content)
+        control_image = [qrcode_image] * batch_size
+        # 输出control_image的长度
+        print("control_image的长度：", len(control_image))
         out = self.pipe(
             prompt=[prompt] * batch_size,
             negative_prompt=[negative_prompt] * batch_size,
