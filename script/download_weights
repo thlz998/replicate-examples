@@ -28,18 +28,18 @@ pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
     pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=CACHE_DIR
 )
 
-controlnet_canny = diffusers.ControlNetModel.from_pretrained(
-    "lllyasviel/sd-controlnet-canny", 
-    torch_dtype=torch.float16,
-    cache_dir=CACHE_DIR)
-pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5",
-    controlnet=controlnet_canny,
-    safety_checker=None,
-    torch_dtype=torch.float16,
-    cache_dir=CACHE_DIR,
-).to("cuda")
-pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
-pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
-    pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=CACHE_DIR
-)
+# controlnet_canny = diffusers.ControlNetModel.from_pretrained(
+#     "lllyasviel/sd-controlnet-canny", 
+#     torch_dtype=torch.float16,
+#     cache_dir=CACHE_DIR)
+# pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
+#     "runwayml/stable-diffusion-v1-5",
+#     controlnet=controlnet_canny,
+#     safety_checker=None,
+#     torch_dtype=torch.float16,
+#     cache_dir=CACHE_DIR,
+# ).to("cuda")
+# pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
+# pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
+#     pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=CACHE_DIR
+# )
