@@ -40,9 +40,11 @@ class Predictor(BasePredictor):
 
 
         self.pipe = StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
-            CACHE_DIR, 
+            # CACHE_DIR, 
+            "runwayml/stable-diffusion-v1-5", 
             torch_dtype=torch.float16,
             controlnet=[controlnet, controlnet_canny],
+            cache_dir=CACHE_DIR,
             ).to(
             "cuda"
         )
