@@ -3,9 +3,8 @@ from typing import List
 import torch
 import time
 from cog import BasePredictor, Input, Path
-# from diffusers import StableDiffusionControlNetImg2ImgPipeline
-import torch
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
+from diffusers import StableDiffusionControlNetImg2ImgPipeline, StableDiffusionControlNetPipeline, ControlNetModel
+
 
 CACHE_DIR = "weights-cache"
 
@@ -28,23 +27,26 @@ class Predictor(BasePredictor):
         """Load the model into memory to make running multiple predictions efficient"""
         # torch.backends.cuda.matmul.allow_tf32 = True
         print("开始时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-
+        controlnet = ControlNetModel.from_pretrained(
+            "Nacholmo/controlnet-qr-pattern",
+            torch_dtype=torch.float16,
+            cache_dir=CACHE_DIR
+        )
         controlnet_canny = ControlNetModel.from_pretrained(
             "lllyasviel/sd-controlnet-canny", 
-            torch_dtype=torch.float16
-        ).to("cuda")
-        controlnet_pose = ControlNetModel.from_pretrained(
-            "lllyasviel/sd-controlnet-openpose", 
-            torch_dtype=torch.float16
-        ).to("cuda")
+            torch_dtype=torch.float16,
+            cache_dir=CACHE_DIR
+        )
 
-        self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-        "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
-        controlnet=[
-        controlnet_pose, 
-        controlnet_canny
-        ],
-        ).to("cuda")
+
+        self.pipe = StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
+            CACHE_DIR, 
+            torch_dtype=torch.float16,
+            controlnet=[controlnet, controlnet_canny],
+            ).to(
+            "cuda"
+        )
+        self.pipe.enable_xformers_memory_efficient_attention()
 
     def generate_qrcode(self, qr_url: str):
         # 从URL中下载二维码
@@ -56,6 +58,7 @@ class Predictor(BasePredictor):
         qrcode_image = resize_for_condition_image(qrcode_image, 768)
         return qrcode_image
 
+    # Define the arguments and types the model takes as input
     def predict(
         self,
         prompt: str = Input(description="QR Code Prompt"),
@@ -90,29 +93,23 @@ class Predictor(BasePredictor):
         seed = torch.randint(0, 2**32, (1,)).item() if seed == -1 else seed
         qrcode_image = self.generate_qrcode(qr_code_content)
         control_image = [qrcode_image] * batch_size
-
-        image = self.pipe(
-            prompt=[prompt] * batch_size,
-            image=[[qrcode_image] * batch_size, [qrcode_image] * batch_size],
-        ).images[0]
-        image.save("output.png")
         # 输出control_image的长度
         # print("control_image的长度：", len(control_image))
-        # out = self.pipe(
-        #     prompt=[prompt] * batch_size,
-        #     negative_prompt=[negative_prompt] * batch_size,
-        #     image=[qrcode_image] * batch_size,
-        #     control_image=control_image,
-        #     width=768,
-        #     height=768,
-        #     guidance_scale=float(guidance_scale),
-        #     controlnet_conditioning_scale=float(controlnet_conditioning_scale),
-        #     generator=torch.Generator().manual_seed(seed),
-        #     strength=float(strength),
-        #     num_inference_steps=num_inference_steps,
-        # )
-        # print("结束时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        # for i, image in enumerate(out.images):
-        #     fname = f"output-{i}.png"
-        #     image.save(fname)
-        #     yield Path(fname)
+        out = self.pipe(
+            prompt=[prompt] * batch_size,
+            negative_prompt=[negative_prompt] * batch_size,
+            image=control_image,
+            control_image=[control_image, control_image],
+            width=512,
+            height=512,
+            # guidance_scale=float(guidance_scale),
+            # controlnet_conditioning_scale=[float(controlnet_conditioning_scale), float(controlnet_conditioning_scale)],
+            # generator=torch.Generator().manual_seed(seed),
+            # strength=float(strength),
+            # num_inference_steps=num_inference_steps,
+        )
+        print("结束时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        for i, image in enumerate(out.images):
+            fname = f"output-{i}.png"
+            image.save(fname)
+            yield Path(fname)
