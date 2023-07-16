@@ -16,10 +16,14 @@ with tempfile.TemporaryDirectory() as temp_dir:
     # controlnet = diffusers.ControlNetModel.from_pretrained(
     #     "Nacholmo/controlnet-qr-pattern", torch_dtype=torch.float16, cache_dir=temp_dir
     # )
-    controlnet_canny = diffusers.ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", 
-                                                   torch_dtype=torch.float16).to("cuda")
-    controlnet_pose = diffusers.ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-openpose", 
-                                                    torch_dtype=torch.float16).to("cuda")
+    controlnet_canny = diffusers.ControlNetModel.from_pretrained(
+        "lllyasviel/sd-controlnet-canny", 
+        torch_dtype=torch.float16,
+        cache_dir=temp_dir).to("cuda")
+    controlnet_pose = diffusers.ControlNetModel.from_pretrained(
+        "lllyasviel/sd-controlnet-openpose", 
+        torch_dtype=torch.float16,
+        cache_dir=temp_dir).to("cuda")
     pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
         "gsdf/Counterfeit-V2.5",
         # "stablediffusionapi/ghostmix",
