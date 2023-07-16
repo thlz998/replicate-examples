@@ -33,7 +33,7 @@ with tempfile.TemporaryDirectory() as temp_dir:
     pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
         pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=temp_dir
     )
-    pipe.save_pretrained(CACHE_DIR, safe_serialization=True)
+    # pipe.save_pretrained(CACHE_DIR, safe_serialization=True)
     print("Done------" + temp_dir)
     temp_dir = temp_dir + "/canny"
     controlnet_canny = diffusers.ControlNetModel.from_pretrained(
@@ -53,5 +53,5 @@ with tempfile.TemporaryDirectory() as temp_dir:
     pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
         pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=temp_dir
     )
-    pipe.save_pretrained(CACHE_DIR, safe_serialization=True)
+    # pipe.save_pretrained(CACHE_DIR, safe_serialization=True)
     print("Done------" + temp_dir)
