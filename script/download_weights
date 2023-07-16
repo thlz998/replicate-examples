@@ -27,6 +27,7 @@ pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
 pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
     pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=CACHE_DIR
 )
+pipe = None
 
 controlnet_canny = diffusers.ControlNetModel.from_pretrained(
     "lllyasviel/sd-controlnet-canny", 
