@@ -11,6 +11,7 @@ sys.path.append(".")
 from predict import CACHE_DIR
 
 with tempfile.TemporaryDirectory() as temp_dir:
+    print("download:" + temp_dir)
     login(token="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")
     temp_dir = temp_dir + "/qr-pattern"
     controlnet = diffusers.ControlNetModel.from_pretrained(
