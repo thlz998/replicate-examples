@@ -11,6 +11,7 @@ build:
     - "qrcode==7.4.2"
     - "torch==2.0.1"
     - "opencv-contrib-python-headless"
+    - "matplotlib"
     - "controlnet_aux"
 
 predict: "predict.py:Predictor"
