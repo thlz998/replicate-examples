@@ -9,6 +9,7 @@ import numpy as np
 from PIL import Image
 
 CACHE_DIR = "weights-cache"
+login(token="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")
 sys.path.append(".")
 
 
