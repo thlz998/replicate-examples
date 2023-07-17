@@ -54,7 +54,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 ).to("cuda")
 generator = torch.Generator(device='cuda').manual_seed(12345)
 image = pipe(
-        image=[pose_image, canny_image],
+        image=[canny_image],
         width=512,
         height=768,
         prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
