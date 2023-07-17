@@ -60,6 +60,9 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
  ],
  cache_dir=CACHE_DIR,
 ).to("cuda")
+# cpu卸载以节省内存，需要加速>=0.17.0
+pipe.enable_model_cpu_offload() 
+
 # generator = torch.Generator(device='cuda').manual_seed(12345)
 pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
 image = pipe(
