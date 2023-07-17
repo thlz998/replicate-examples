@@ -48,7 +48,7 @@ pose_image.save('pose.png')
 controlnet_qr = ControlNetModel.from_pretrained(
         "Nacholmo/controlnet-qr-pattern", 
         torch_dtype=torch.float16,
-        cache_dir=CACHE_DIR)
+        cache_dir=CACHE_DIR).to("cuda")
 
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
  "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
