@@ -13,6 +13,6 @@ build:
     - "opencv-contrib-python-headless"
     - "matplotlib"
     - "controlnet_aux"
-    - "predict"
+    - "numpy"
 
 predict: "predict.py:Predictor"

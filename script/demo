@@ -4,10 +4,11 @@ from huggingface_hub import login
 import torch
 from controlnet_aux import OpenposeDetector
 from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
-from predict import CACHE_DIR
 import cv2
 import numpy as np
 from PIL import Image
+
+CACHE_DIR = "weights-cache"
 sys.path.append(".")
 
 
