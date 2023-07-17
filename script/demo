@@ -68,7 +68,7 @@ image = pipe(
         height=768,
         prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
         negative_prompt="cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, blurry, bad anatomy, bad proportions",
-        num_inference_steps=10,
+        num_inference_steps=50,
         generator=generator,
         controlnet_conditioning_scale=[1.0,1.0]
         ).images[0]
