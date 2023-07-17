@@ -56,12 +56,13 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 #   controlnet_pose, 
 #   controlnet_canny,
   controlnet_qr,
+  controlnet_qr,
  ],
  cache_dir=CACHE_DIR,
 ).to("cuda")
 generator = torch.Generator(device='cuda').manual_seed(12345)
 image = pipe(
-        image=[qrImage],
+        image=[qrImage, qrImage],
         width=512,
         height=768,
         prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
