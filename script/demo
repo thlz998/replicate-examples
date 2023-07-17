@@ -24,7 +24,7 @@ canny_image = Image.fromarray(cannyImage)
 canny_image.save('canny.png')
 
 # openImage
-openImage = Image.open('input.png')
+openImage = Image.open('input.jpeg')
 openpose = OpenposeDetector.from_pretrained('lllyasviel/ControlNet')
 pose_image = openpose(openImage)
 pose_image.save('pose.png')
