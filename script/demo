@@ -55,8 +55,8 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 generator = torch.Generator(device='cuda').manual_seed(12345)
 image = pipe(
         image=[pose_image, canny_image],
-        width=1200,
-        height=1600,
+        width=512,
+        height=768,
         prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
         negative_prompt="cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, blurry, bad anatomy, bad proportions",
         num_inference_steps=20,
