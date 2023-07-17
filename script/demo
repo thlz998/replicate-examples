@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+import sys
+from huggingface_hub import login
+import torch
+from controlnet_aux import OpenposeDetector
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
+from predict import CACHE_DIR
+import cv2
+import numpy as np
+from PIL import Image
+sys.path.append(".")
+
+
+cannyImage = Image.open('input.jpeg')
+cannyImage = np.array(cannyImage)
+
+low_threshold = 100
+high_threshold = 200
+
+cannyImage = cv2.Canny(cannyImage, low_threshold, high_threshold)
+cannyImage = cannyImage[:, :, None]
+cannyImage = np.concatenate([cannyImage, cannyImage, cannyImage], axis=2)
+canny_image = Image.fromarray(cannyImage)
+canny_image.save('canny.png')
+
+# openImage
+openImage = Image.open('input.png')
+openpose = OpenposeDetector.from_pretrained('lllyasviel/ControlNet')
+pose_image = openpose(openImage)
+pose_image.save('pose.png')
+
+# 加载模型
+controlnet_canny = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", 
+                                                   torch_dtype=torch.float16).to("cuda")
+controlnet_pose = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-openpose", 
+                                                   torch_dtype=torch.float16).to("cuda")
+
+pipe = StableDiffusionControlNetPipeline.from_pretrained(
+ "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
+ controlnet=[
+  controlnet_pose, 
+  controlnet_canny
+ ],
+).to("cuda")
+
+image = pipe(prompt='...',
+             image=[pose_image, canny_image],
+        ).images[0]
+image.save("output.png")

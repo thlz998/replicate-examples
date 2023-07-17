@@ -10,4 +10,7 @@ build:
     - "Pillow==9.5.0"
     - "qrcode==7.4.2"
     - "torch==2.0.1"
+    - "opencv-contrib-python-headless"
+    - "controlnet_aux"
+
 predict: "predict.py:Predictor"
