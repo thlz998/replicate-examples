@@ -13,6 +13,8 @@ CACHE_DIR = "weights-cache"
 login(token="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")
 sys.path.append(".")
 
+qrImage = Image.open('qr-code-6.png')
+
 
 cannyImage = Image.open('input.jpeg')
 cannyImage = np.array(cannyImage)
@@ -35,26 +37,31 @@ pose_image = openpose(openImage)
 pose_image.save('pose.png')
 
 # 加载模型
-controlnet_canny = ControlNetModel.from_pretrained(
-        "lllyasviel/sd-controlnet-canny", 
-        cache_dir=CACHE_DIR,
-        torch_dtype=torch.float16)
+# controlnet_canny = ControlNetModel.from_pretrained(
+#         "lllyasviel/sd-controlnet-canny", 
+#         cache_dir=CACHE_DIR,
+#         torch_dtype=torch.float16)
 # controlnet_pose = ControlNetModel.from_pretrained(
 #         "lllyasviel/sd-controlnet-openpose", 
 #         torch_dtype=torch.float16,
 #         cache_dir=CACHE_DIR)
+controlnet_qr = ControlNetModel.from_pretrained(
+        "Nacholmo/controlnet-qr-pattern", 
+        torch_dtype=torch.float16,
+        cache_dir=CACHE_DIR)
 
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
  "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
  controlnet=[
 #   controlnet_pose, 
-  controlnet_canny
+#   controlnet_canny,
+  controlnet_qr,
  ],
  cache_dir=CACHE_DIR,
 ).to("cuda")
 generator = torch.Generator(device='cuda').manual_seed(12345)
 image = pipe(
-        image=[canny_image],
+        image=[qrImage],
         width=512,
         height=768,
         prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
