@@ -3,7 +3,8 @@ import sys
 from huggingface_hub import login
 import torch
 from controlnet_aux import OpenposeDetector
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
+# from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
 import cv2
 import numpy as np
 from PIL import Image
@@ -37,11 +38,11 @@ pose_image.save('pose.png')
 controlnet_canny = ControlNetModel.from_pretrained(
         "lllyasviel/sd-controlnet-canny", 
         cache_dir=CACHE_DIR,
-        torch_dtype=torch.float16).to("cuda")
+        torch_dtype=torch.float16)
 controlnet_pose = ControlNetModel.from_pretrained(
         "lllyasviel/sd-controlnet-openpose", 
         torch_dtype=torch.float16,
-        cache_dir=CACHE_DIR).to("cuda")
+        cache_dir=CACHE_DIR)
 
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
  "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
