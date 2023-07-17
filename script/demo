@@ -32,10 +32,14 @@ pose_image = openpose(openImage)
 pose_image.save('pose.png')
 
 # 加载模型
-controlnet_canny = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", 
-                                                   torch_dtype=torch.float16).to("cuda")
-controlnet_pose = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-openpose", 
-                                                   torch_dtype=torch.float16).to("cuda")
+controlnet_canny = ControlNetModel.from_pretrained(
+        "lllyasviel/sd-controlnet-canny", 
+        cache_dir=CACHE_DIR,
+        torch_dtype=torch.float16).to("cuda")
+controlnet_pose = ControlNetModel.from_pretrained(
+        "lllyasviel/sd-controlnet-openpose", 
+        torch_dtype=torch.float16,
+        cache_dir=CACHE_DIR).to("cuda")
 
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
  "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
@@ -43,6 +47,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
   controlnet_pose, 
   controlnet_canny
  ],
+ cache_dir=CACHE_DIR,
 ).to("cuda")
 
 image = pipe(prompt='...',
