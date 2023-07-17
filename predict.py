@@ -45,9 +45,7 @@ class Predictor(BasePredictor):
             torch_dtype=torch.float16,
             controlnet=[controlnet, controlnet_canny],
             cache_dir=CACHE_DIR,
-            ).to(
-            "cuda"
-        )
+            ).to("cuda")
         self.pipe.enable_xformers_memory_efficient_attention()
 
     def generate_qrcode(self, qr_url: str):

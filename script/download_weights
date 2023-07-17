@@ -1,45 +1,33 @@
 #!/usr/bin/env python3
 import sys
-import tempfile
 from huggingface_hub import login
 import diffusers
 import torch
 
-# append project directory to path so predict.py can be imported
 sys.path.append(".")
 
 from predict import CACHE_DIR
 
 login(token="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")
-controlnet = diffusers.ControlNetModel.from_pretrained(
+qrPatternControlnet = diffusers.ControlNetModel.from_pretrained(
     "Nacholmo/controlnet-qr-pattern",
     torch_dtype=torch.float16,
     cache_dir=CACHE_DIR
 )
+cannyControlnet = diffusers.ControlNetModel.from_pretrained(
+    "lllyasviel/sd-controlnet-canny",
+    torch_dtype=torch.float16,
+    cache_dir=CACHE_DIR
+)
+
 pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
     "gsdf/Counterfeit-V2.5",
-    controlnet=controlnet,
+    controlnet=[qrPatternControlnet, cannyControlnet],
     safety_checker=None,
     torch_dtype=torch.float16,
     cache_dir=CACHE_DIR,
 ).to("cuda")
-# pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
-pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
-    pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=CACHE_DIR
-)
-pipe = None
-
-controlnet_canny = diffusers.ControlNetModel.from_pretrained(
-    "lllyasviel/sd-controlnet-canny", 
-    torch_dtype=torch.float16,
-    cache_dir=CACHE_DIR)
-pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5",
-    controlnet=controlnet_canny,
-    safety_checker=None,
-    torch_dtype=torch.float16,
-    cache_dir=CACHE_DIR,
-).to("cuda")
+pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
 pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
     pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=CACHE_DIR
 )
