@@ -35,7 +35,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 pipe.enable_model_cpu_offload() 
 
 generator = torch.Generator(device='cuda').manual_seed(941189224)
-pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
+# pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
 image = pipe(
         image=[qrImage],
         width=512,
