@@ -1,20 +1,20 @@
 build:
-    gpu: true
-    cuda: "11.6"
-    python_version: "3.9"
-    python_packages:
-      # - "diffusers"
-      - "diffusers==0.17.1"
-      - "transformers==4.30.2"
-      - "accelerate==0.20.3"
-      - "xformers==0.0.20"
-      - "Pillow==9.5.0"
-      - "qrcode==7.4.2"
-      - "torch==2.0.1"
-      - "opencv-contrib-python-headless"
-      - "matplotlib"
-      - "controlnet_aux"
-      - "numpy"
-      - "omegaconf"
-  
-  predict: "predict.py:Predictor"
+  gpu: true
+  cuda: "11.6"
+  python_version: "3.9"
+  python_packages:
+    # - "diffusers"
+    - "diffusers==0.17.1"
+    - "transformers==4.30.2"
+    - "accelerate==0.20.3"
+    - "xformers==0.0.20"
+    - "Pillow==9.5.0"
+    - "qrcode==7.4.2"
+    - "torch==2.0.1"
+    - "opencv-contrib-python-headless"
+    - "matplotlib"
+    - "controlnet_aux"
+    - "numpy"
+    - "omegaconf"
+
+predict: "predict.py:Predictor"
