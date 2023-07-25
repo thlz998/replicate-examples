@@ -29,7 +29,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
         "runwayml/stable-diffusion-v1-5",
         # "SG161222/Realistic_Vision_V4.0",
         # model_name = "hanafuusen2001/ReVAnimated",
-        # torch_dtype=torch.float16,
+        torch_dtype=torch.float16,
         controlnet=[
         controlnet_qr,
         ],
