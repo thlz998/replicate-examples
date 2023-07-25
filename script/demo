@@ -43,7 +43,7 @@ pipe.enable_model_cpu_offload()
 generator = torch.Generator(device='cuda').manual_seed(12345)
 
 # 加载lora
-lora_scales = [0.5]  # 与lora_paths一一对应的scale值
+lora_scales = [0.2,0.7]  # 与lora_paths一一对应的scale值
 lora_paths=["weights-cache/Lora/blindbox_v1_mix.safetensors"]
 lora_manager = LoRAManager(
     lora_paths, pipe
