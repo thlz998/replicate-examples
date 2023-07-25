@@ -3,6 +3,7 @@ build:
   cuda: "11.6"
   python_version: "3.9"
   python_packages:
+    - "safetensors"
     - "diffusers"
     # - "diffusers==0.17.1"
     - "transformers==4.30.2"
