@@ -56,7 +56,9 @@ model_name = "revAnimated_v122"
 # ).to("cuda")
 # pipe = StableDiffusionControlNetPipeline.from_single_file(
 pipe = StableDiffusionPipeline.from_single_file(
-    "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors",
+    model_file_path,
+#     "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors",
+    controlnet=[controlnet_qr_monster],
 ).to("cuda")
 
 
