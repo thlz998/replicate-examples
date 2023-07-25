@@ -27,8 +27,7 @@ pipe = StableDiffusionPipeline.from_single_file(
 # 加载模型
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
         # "runwayml/stable-diffusion-v1-5",
-        "hanafuusen2001/ReVAnimated",
-        # model_name = "revAnimated_v122",
+        model_name = "hanafuusen2001/ReVAnimated",
         torch_dtype=torch.float16,
         controlnet=[
         controlnet_qr,
