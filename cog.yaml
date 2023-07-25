@@ -3,7 +3,8 @@ build:
   cuda: "11.6"
   python_version: "3.9"
   python_packages:
-    - "diffusers==0.17.1"
+    - "diffusers"
+    # - "diffusers==0.17.1"
     - "transformers==4.30.2"
     - "accelerate==0.20.3"
     - "xformers==0.0.20"
