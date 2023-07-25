@@ -46,10 +46,11 @@ controlnet_qr_monster = ControlNetModel.from_pretrained(
         cache_dir=CACHE_DIR).to("cuda")
 
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
-        "hanafuusen2001/ReVAnimated", torch_dtype=torch.float16,
+        "revAnimated_v122.safetensors", torch_dtype=torch.float16,
         controlnet=[controlnet_qr_monster],
         cache_dir=CACHE_DIR,
 ).to("cuda")
+# cpu卸载以节省内存，需要加速>=0.17.0
 pipe.enable_model_cpu_offload() 
 
 generator = torch.Generator(device='cuda').manual_seed(941189224)
