@@ -15,5 +15,6 @@ build:
     - "matplotlib"
     - "controlnet_aux"
     - "numpy"
+    - "omegaconf"
 
 predict: "predict.py:Predictor"
