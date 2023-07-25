@@ -2,8 +2,6 @@
 import sys
 from huggingface_hub import login
 import torch
-from controlnet_aux import OpenposeDetector
-# from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
 from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline
 from PIL import Image
 
