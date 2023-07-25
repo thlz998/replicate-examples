@@ -22,12 +22,12 @@ pipe = StableDiffusionPipeline.from_single_file(
     "https://huggingface.co/hanafuusen2001/ReVAnimated/revAnimated_v122.safetensors",
     cache_dir=CACHE_DIR,
 ).to("cuda")
-pipe = None
+# pipe = None
 
 # 加载模型
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
         # "runwayml/stable-diffusion-v1-5",
-        CACHE_DIR + "models--hanafuusen2001--ReVAnimated",
+        CACHE_DIR + "/models--hanafuusen2001--ReVAnimated",
         model_name = "revAnimated_v122",
         torch_dtype=torch.float16,
         controlnet=[
