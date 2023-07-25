@@ -17,5 +17,6 @@ build:
     - "controlnet_aux"
     - "numpy"
     - "omegaconf"
+    - "lora_diffusion"
 
 predict: "predict.py:Predictor"
