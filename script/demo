@@ -18,10 +18,10 @@ controlnet_qr = ControlNetModel.from_pretrained(
         cache_dir=CACHE_DIR).to("cuda")
 
 # 下载大模型
-pipe = StableDiffusionPipeline.from_single_file(
-    "https://huggingface.co/hanafuusen2001/ReVAnimated/revAnimated_v122.safetensors",
-    cache_dir=CACHE_DIR,
-).to("cuda")
+# pipe = StableDiffusionPipeline.from_single_file(
+#     "https://huggingface.co/hanafuusen2001/ReVAnimated/revAnimated_v122.safetensors",
+#     cache_dir=CACHE_DIR,
+# ).to("cuda")
 # pipe = None
 
 # 加载模型
@@ -29,6 +29,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
         # "runwayml/stable-diffusion-v1-5",
         CACHE_DIR+"/models--hanafuusen2001--ReVAnimated",
         model_name = "hanafuusen2001/ReVAnimated",
+        use_safetensors=True,
         torch_dtype=torch.float16,
         controlnet=[
         controlnet_qr,
