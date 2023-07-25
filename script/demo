@@ -47,7 +47,7 @@ controlnet_qr_monster = ControlNetModel.from_pretrained(
 
 model_file_path = CACHE_DIR+"/"+"revAnimated_v122.safetensors"
 model_name = "revAnimated_v122"
-pipe = StableDiffusionControlNetPipeline.from_pretrained(
+pipe = StableDiffusionControlNetPipeline.save_pretrained(
         model_file_path,
         model_name=model_name,
         torch_dtype=torch.float16,
