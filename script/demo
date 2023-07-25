@@ -49,7 +49,6 @@ model_file_path = CACHE_DIR+"/"+"revAnimated_v122.safetensors"
 model_name = "revAnimated_v122"
 pipe = StableDiffusionControlNetPipeline.save_pretrained(
         model_file_path,
-        torch_dtype=torch.float16,
         controlnet=[controlnet_qr_monster],
         # cache_dir=CACHE_DIR,
 ).to("cuda")
