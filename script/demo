@@ -16,7 +16,7 @@ sys.path.append(".")
 qrImage = Image.open('k0a1a.png')
 
 
-cannyImage = Image.open('input.jpeg')
+cannyImage = Image.open('k0a1a.png')
 cannyImage = np.array(cannyImage)
 
 low_threshold = 100
@@ -29,7 +29,7 @@ canny_image = Image.fromarray(cannyImage)
 canny_image.save('canny.png')
 
 # openImage
-openImage = Image.open('input.jpeg')
+openImage = Image.open('k0a1a.png')
 openpose = OpenposeDetector.from_pretrained(
         'lllyasviel/ControlNet',
         cache_dir=CACHE_DIR)
