@@ -56,7 +56,7 @@ model_name = "revAnimated_v122"
 # ).to("cuda")
 # pipe = StableDiffusionControlNetPipeline.from_single_file(
 pipe = StableDiffusionPipeline.from_single_file(
-    "https://huggingface.co/hanafuusen2001/ReVAnimated/raw/main/revAnimated_v122.safetensors",
+    "https://huggingface.co/hanafuusen2001/ReVAnimated/resolve/main/revAnimated_v122.safetensors",
     controlnet=[controlnet_qr_monster],
     cache_dir=CACHE_DIR,
 ).to("cuda")
