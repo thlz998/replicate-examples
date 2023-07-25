@@ -48,16 +48,10 @@ controlnet_qr_monster = ControlNetModel.from_pretrained(
 model_file_path = CACHE_DIR+"/"+"revAnimated_v122.safetensors"
 model_name = "revAnimated_v122"
 
-# pipe = StableDiffusionControlNetPipeline.from_single_file(
-#         "revAnimated_v122.safetensors",
-#         torch_dtype=torch.float16,
-#         controlnet=[controlnet_qr_monster],
-#         cache_dir=CACHE_DIR,
-# ).to("cuda")
-# pipe = StableDiffusionControlNetPipeline.from_single_file(
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
     CACHE_DIR,
     model_name = "revAnimated_v122",
+    torch_dtype=torch.float16,
     controlnet=[controlnet_qr_monster],
     cache_dir=CACHE_DIR,
 ).to("cuda")
