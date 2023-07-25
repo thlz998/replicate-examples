@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git pull && \
+
 cog predict \
 -i prompt="monkey scuba diving" \
 -i qr_code_content="https://dl-1257240317.cos.ap-guangzhou.myqcloud.com/k0a1a/test-qrcode.png" \

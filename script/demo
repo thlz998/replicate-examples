@@ -63,7 +63,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 # cpu卸载以节省内存，需要加速>=0.17.0
 pipe.enable_model_cpu_offload() 
 
-# generator = torch.Generator(device='cuda').manual_seed(12345)
+generator = torch.Generator(device='cuda').manual_seed(12345)
 pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
 image = pipe(
         image=[qrImage],
@@ -73,7 +73,41 @@ image = pipe(
         prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
         negative_prompt="cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, blurry, bad anatomy, bad proportions",
         num_inference_steps=50,
-        # generator=generator,
-        controlnet_conditioning_scale=[1.0,1.0]
+        generator=generator,
+        controlnet_conditioning_scale=[1.0,1.0],
+        # control_image=[control_image, control_image],
+        # guidance_scale=float(guidance_scale),
+        # strength=float(strength),
         ).images[0]
 image.save("output.png")
+
+
+# Steps: 20,
+# Sampler: DPM++ 2M SDE Karras,
+# CFG scale: 7,
+# Seed: 4157771897,
+# Size: 512x512,
+# Model: [吉卜力水彩风]ghibliStyleMix_v10,
+# ControlNet 0: "preprocessor: none,
+# model: controlnetQRPatternQR_v20 [2d8d5750],
+# weight: 1,
+# starting/ending: (0,
+# 0.85),
+# resize mode: Crop and Resize,
+# pixel perfect: True,
+# control mode: Balanced,
+# preprocessor params: (512,
+# 64,
+# 64)",
+# ControlNet 1: "preprocessor: none,
+# model: control_v1p_sd15_qrcode_monster [a6e58995],
+# weight: 0.3,
+# starting/ending: (0,
+# 1),
+# resize mode: Crop and Resize,
+# pixel perfect: True,
+# control mode: Balanced,
+# preprocessor params: (512,
+# 64,
+# 64)",
+# Version: v1.4.1
