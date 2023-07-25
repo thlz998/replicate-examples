@@ -2,6 +2,10 @@ build:
   gpu: true
   cuda: "11.6"
   python_version: "3.9"
+  system_packages:
+    - "ffmpeg"
+    - "libsm6"
+    - "libxext6"
   python_packages:
     # - "safetensors"
     # - "diffusers"
