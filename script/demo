@@ -4,7 +4,7 @@ from huggingface_hub import login
 import torch
 # from controlnet_aux import OpenposeDetector
 # from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline
 # import cv2
 # import numpy as np
 from PIL import Image
@@ -47,9 +47,10 @@ controlnet_qr_monster = ControlNetModel.from_pretrained(
 
 model_file_path = CACHE_DIR+"/"+"revAnimated_v122.safetensors"
 model_name = "revAnimated_v122"
-pipe = StableDiffusionControlNetPipeline.save_pretrained(
+pipe = StableDiffusionPipeline.from_single_file(
         model_file_path,
-        controlnet=[controlnet_qr_monster],
+        use_safetensors=True,
+        # controlnet=[controlnet_qr_monster],
         # cache_dir=CACHE_DIR,
 ).to("cuda")
 # pipe = StableDiffusionControlNetPipeline.from_pretrained(
