@@ -33,7 +33,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
         controlnet=[
         controlnet_qr,
         ],
-        cache_dir=CACHE_DIR,
+        # cache_dir=CACHE_DIR,
 ).to("cuda")
 
 # cpu卸载以节省内存，需要加速>=0.17.0
