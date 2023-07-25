@@ -2,53 +2,81 @@
 import sys
 from huggingface_hub import login
 import torch
-# from controlnet_aux import OpenposeDetector
+from controlnet_aux import OpenposeDetector
 # from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline
-# import cv2
-# import numpy as np
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
+import cv2
+import numpy as np
 from PIL import Image
 
 CACHE_DIR = "weights-cache"
 login(token="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")
 sys.path.append(".")
 
-qrImage = Image.open('k0a1a.png')
+qrImage = Image.open('qr-code-6.png')
 
-controlnet_qr_monster = ControlNetModel.from_pretrained(
-        "monster-labs/control_v1p_sd15_qrcode_monster", 
+
+cannyImage = Image.open('input.jpeg')
+cannyImage = np.array(cannyImage)
+
+low_threshold = 100
+high_threshold = 200
+
+cannyImage = cv2.Canny(cannyImage, low_threshold, high_threshold)
+cannyImage = cannyImage[:, :, None]
+cannyImage = np.concatenate([cannyImage, cannyImage, cannyImage], axis=2)
+canny_image = Image.fromarray(cannyImage)
+canny_image.save('canny.png')
+
+# openImage
+openImage = Image.open('input.jpeg')
+openpose = OpenposeDetector.from_pretrained(
+        'lllyasviel/ControlNet',
+        cache_dir=CACHE_DIR)
+pose_image = openpose(openImage)
+pose_image.save('pose.png')
+
+# 加载模型
+# controlnet_canny = ControlNetModel.from_pretrained(
+#         "lllyasviel/sd-controlnet-canny", 
+#         cache_dir=CACHE_DIR,
+#         torch_dtype=torch.float16)
+# controlnet_pose = ControlNetModel.from_pretrained(
+#         "lllyasviel/sd-controlnet-openpose", 
+#         torch_dtype=torch.float16,
+#         cache_dir=CACHE_DIR)
+controlnet_qr = ControlNetModel.from_pretrained(
+        "Nacholmo/controlnet-qr-pattern", 
         torch_dtype=torch.float16,
         cache_dir=CACHE_DIR).to("cuda")
 
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5",
-#     CACHE_DIR,
-#     model_name = "revAnimated_v122",
-    torch_dtype=torch.float16,
-    controlnet=[controlnet_qr_monster],
-    cache_dir=CACHE_DIR,
+ "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
+ controlnet=[
+#   controlnet_pose, 
+#   controlnet_canny,
+#   controlnet_qr,
+  controlnet_qr,
+ ],
+ cache_dir=CACHE_DIR,
 ).to("cuda")
-
-
-# pipeline.load_lora_weights（ “。”，weight_name = “light_and_shadow.safetensors”）
 # cpu卸载以节省内存，需要加速>=0.17.0
 pipe.enable_model_cpu_offload() 
 
-generator = torch.Generator(device='cuda').manual_seed(941189224)
-# pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
+generator = torch.Generator(device='cuda').manual_seed(12345)
+pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
 image = pipe(
         image=[qrImage],
+        # image=[qrImage, qrImage],
         width=512,
-        height=512,
-        prompt= "(masterpiece),(best quality),(ultra-detailed), (full body:1.2),1girl,chibi,cute, smile, open mouth,flower, outdoors, playing guitar, music, beret, holding guitar, jacket, blush, tree, :3, shirt, short hair, cherry blossoms, green headwear, blurry, brown hair",
-        negative_prompt="(low quality:1.3), (worst quality:1.3)",
+        height=768,
+        prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
+        negative_prompt="cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, blurry, bad anatomy, bad proportions",
+        num_inference_steps=50,
         generator=generator,
-        num_inference_steps=30,
-        control_guidance_start=[0.2],
-        control_guidance_end=[0.8],
-        # controlnet_conditioning_scale=[1.0],
+        controlnet_conditioning_scale=[1.0,1.0],
         # control_image=[control_image, control_image],
         # guidance_scale=float(guidance_scale),
         # strength=float(strength),
         ).images[0]
-image.save("output1.png")
+image.save("output.png")
