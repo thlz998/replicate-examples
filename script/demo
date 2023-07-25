@@ -45,11 +45,20 @@ controlnet_qr_monster = ControlNetModel.from_pretrained(
         torch_dtype=torch.float16,
         cache_dir=CACHE_DIR).to("cuda")
 
+model_file_path = CACHE_DIR+"/"+"revAnimated_v122.safetensors"
+model_name = "revAnimated_v122"
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
-        "revAnimated_v122.safetensors", torch_dtype=torch.float16,
+        model_file_path,
+        model_name,
+        torch_dtype=torch.float16,
         controlnet=[controlnet_qr_monster],
-        cache_dir=CACHE_DIR,
+        # cache_dir=CACHE_DIR,
 ).to("cuda")
+# pipe = StableDiffusionControlNetPipeline.from_pretrained(
+#         "revAnimated_v122.safetensors", torch_dtype=torch.float16,
+#         controlnet=[controlnet_qr_monster],
+#         cache_dir=CACHE_DIR,
+# ).to("cuda")
 # cpu卸载以节省内存，需要加速>=0.17.0
 pipe.enable_model_cpu_offload() 
 
