@@ -4,7 +4,7 @@ from huggingface_hub import login
 import torch
 from controlnet_aux import OpenposeDetector
 # from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, DPMSolverMultistepScheduler
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline
 from PIL import Image
 
 CACHE_DIR = "weights-cache"
@@ -19,13 +19,25 @@ controlnet_qr = ControlNetModel.from_pretrained(
         torch_dtype=torch.float16,
         cache_dir=CACHE_DIR).to("cuda")
 
-pipe = StableDiffusionControlNetPipeline.from_pretrained(
- "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
- controlnet=[
-  controlnet_qr,
- ],
- cache_dir=CACHE_DIR,
+# 下载大模型
+pipe = StableDiffusionPipeline.from_single_file(
+    "https://huggingface.co/hanafuusen2001/ReVAnimated/revAnimated_v122.safetensors",
+    cache_dir=CACHE_DIR,
 ).to("cuda")
+pipe = None
+
+# 加载模型
+pipe = StableDiffusionControlNetPipeline.from_pretrained(
+        # "runwayml/stable-diffusion-v1-5",
+        CACHE_DIR,
+        model_name = "revAnimated_v122",
+        torch_dtype=torch.float16,
+        controlnet=[
+        controlnet_qr,
+        ],
+        cache_dir=CACHE_DIR,
+).to("cuda")
+
 # cpu卸载以节省内存，需要加速>=0.17.0
 pipe.enable_model_cpu_offload() 
 
