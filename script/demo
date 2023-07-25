@@ -36,10 +36,10 @@ qrImage = Image.open('qr-code-6.png')
 # pose_image = openpose(openImage)
 # pose_image.save('pose.png')
 
-controlnet_qr_brightness = ControlNetModel.from_pretrained(
-        "ioclab/control_v1p_sd15_brightness", 
-        torch_dtype=torch.float16,
-        cache_dir=CACHE_DIR).to("cuda")
+# controlnet_qr_brightness = ControlNetModel.from_pretrained(
+#         "ioclab/control_v1p_sd15_brightness", 
+#         torch_dtype=torch.float16,
+#         cache_dir=CACHE_DIR).to("cuda")
 controlnet_qr_monster = ControlNetModel.from_pretrained(
         "monster-labs/control_v1p_sd15_qrcode_monster", 
         torch_dtype=torch.float16,
@@ -49,7 +49,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
  "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16,
  controlnet=[
   controlnet_qr_monster,
-  controlnet_qr_brightness,
+#   controlnet_qr_brightness,
  ],
  cache_dir=CACHE_DIR,
 ).to("cuda")
@@ -59,7 +59,8 @@ pipe.enable_model_cpu_offload()
 generator = torch.Generator(device='cuda').manual_seed(12345)
 pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
 image = pipe(
-        image=[qrImage, qrImage],
+        image=[qrImage],
+        # image=[qrImage, qrImage],
         width=512,
         height=768,
         prompt= "a beautiful hollywood actress wearing black dress attending award winning event, red carpet stairs at background",
