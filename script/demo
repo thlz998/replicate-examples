@@ -13,7 +13,7 @@ CACHE_DIR = "weights-cache"
 login(token="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")
 sys.path.append(".")
 
-qrImage = Image.open('qr-code-6.png')
+qrImage = Image.open('k0a1a.png')
 
 
 cannyImage = Image.open('input.jpeg')
