@@ -57,7 +57,7 @@ model_name = "revAnimated_v122"
 # pipe = StableDiffusionControlNetPipeline.from_single_file(
 pipe = StableDiffusionPipeline.from_pretrained(
     CACHE_DIR,
-    model_name = "revAnimated_v122"
+    model_name = "revAnimated_v122",
     controlnet=[controlnet_qr_monster],
     cache_dir=CACHE_DIR,
 ).to("cuda")
