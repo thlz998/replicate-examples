@@ -47,16 +47,19 @@ controlnet_qr_monster = ControlNetModel.from_pretrained(
 
 model_file_path = CACHE_DIR+"/"+"revAnimated_v122.safetensors"
 model_name = "revAnimated_v122"
-pipe = StableDiffusionPipeline.from_single_file(
-        model_file_path,
-        # controlnet=[controlnet_qr_monster],
-        # cache_dir=CACHE_DIR,
-).to("cuda")
-# pipe = StableDiffusionControlNetPipeline.from_pretrained(
-#         "revAnimated_v122.safetensors", torch_dtype=torch.float16,
+
+# pipe = StableDiffusionControlNetPipeline.from_single_file(
+#         "revAnimated_v122.safetensors",
+#         torch_dtype=torch.float16,
 #         controlnet=[controlnet_qr_monster],
 #         cache_dir=CACHE_DIR,
 # ).to("cuda")
+pipe = StableDiffusionControlNetPipeline.from_single_file(
+    "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors",
+).to("cuda")
+
+
+# pipeline.load_lora_weights（ “。”，weight_name = “light_and_shadow.safetensors”）
 # cpu卸载以节省内存，需要加速>=0.17.0
 pipe.enable_model_cpu_offload() 
 
