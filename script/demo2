@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+import sys
+from huggingface_hub import login
+import torch
+import time as time_
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline, EulerDiscreteScheduler
+from lora_diffusion import LoRAManager
+from PIL import Image
+
+CACHE_DIR = "weights-cache"
+sys.path.append(".")
+
+seed = 1383557390
+
+model_key_base_safetensors = "weights-cache/models.revAnimated_v122.safetensors"
+
+pipe = StableDiffusionPipeline.from_single_file(model_key_base_safetensors, torch_dtype=torch.float16)
+
+lora_model_file = 'weights-cache/Lora/blindbox_v1_mix.safetensors'
+pipe.load_lora_weights(lora_model_file)
+
+pipe = pipe.to("cuda", torch.float16)
+
+device = 'cuda'
+generator = torch.Generator(device=device)
+generator = generator.manual_seed(seed)
+
+prompt = 'a woman with blonde hair and a white shirt is looking at the viewer, masterpiece, best quality'
+negative_prompt = 'low quality'
+guidance_scale = 7.5
+num_inference_steps = 30
+
+scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)
+pipe.scheduler = scheduler
+pipe.scheduler.set_timesteps(num_inference_steps)
+
+images = pipe(
+prompt=[prompt], 
+negative_prompt=[negative_prompt],
+guidance_scale=guidance_scale,
+num_inference_steps=num_inference_steps,
+generator=generator).images
+
+images[0].save(f'inference-{int(time_.time())}-{seed}.png')
