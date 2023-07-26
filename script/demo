@@ -58,7 +58,7 @@ generator = torch.Generator(device='cuda').manual_seed(12345)
 # cpu卸载以节省内存，需要加速>=0.17.0
 pipe.enable_model_cpu_offload() 
 image = pipe(
-        image=[qrImage],
+        # image=[qrImage],
         width=512,
         height=512,
         prompt= prompt,
@@ -66,7 +66,7 @@ image = pipe(
         num_inference_steps=50,
         generator=generator,
         controlnet_conditioning_scale=[1.0,1.0],
-        # control_image=[control_image, control_image],
+        control_image=[qrImage, qrImage],
         # guidance_scale=float(guidance_scale),
         # strength=float(strength),
         control_guidance_start=[0.3, 0],
