@@ -2,9 +2,8 @@
 import sys
 from huggingface_hub import login
 import torch
-import time as time_
 from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline, EulerDiscreteScheduler
-from lora_diffusion import LoRAManager
+# from lora_diffusion import LoRAManager
 from PIL import Image
 
 CACHE_DIR = "weights-cache"
@@ -28,7 +27,8 @@ controlnet_qr = ControlNetModel.from_pretrained(
         torch_dtype=torch.float16,
         cache_dir=CACHE_DIR).to("cuda")
 
-components["controlnet"] = [controlnet_qr]
+components["controlnet"] = [controlnet_qr, controlnet_qr]
+components["cache_dir"] = CACHE_DIR
 pipe = StableDiffusionControlNetPipeline(**components).to("cuda")
 
 lora_model_file = './weights-cache/Lora/blindbox_v1_mix.safetensors'
@@ -55,8 +55,8 @@ negative_prompt=negative_prompt,
 guidance_scale=guidance_scale,
 num_inference_steps=num_inference_steps,
 generator=generator,
-image=[qrImage],
-controlnet_conditioning_scale=[1.0],
-).images
+image=[qrImage, qrImage],
+controlnet_conditioning_scale=[1.0, 1.0],
+).images[0]
 
-images[0].save(f'output.png')
+images.save(f'output.png')
