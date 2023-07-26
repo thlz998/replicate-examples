@@ -28,7 +28,7 @@ controlnet_qr = ControlNetModel.from_pretrained(
         cache_dir=CACHE_DIR).to("cuda")
 
 components["controlnet"] = [controlnet_qr, controlnet_qr]
-components["cache_dir"] = CACHE_DIR
+# components["cache_dir"] = CACHE_DIR
 pipe = StableDiffusionControlNetPipeline(**components).to("cuda")
 
 lora_model_file = './weights-cache/Lora/blindbox_v1_mix.safetensors'
