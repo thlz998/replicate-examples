@@ -2,6 +2,7 @@
 import sys
 from huggingface_hub import login
 import torch
+import os
 from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline
 from lora_diffusion import LoRAManager
 from PIL import Image
@@ -43,7 +44,12 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 print("11111----------------------------")
 lora_paths=["weights-cache/Lora/blindbox_v1_mix.safetensors", "weights-cache/Lora/blindbox_v1_mix.safetensors"]
 print("22222----------------------------")
-
+print(lora_paths)
+# 判断文件是否存在
+for path in lora_paths:
+        if not os.path.exists(path):
+                print("lora file not exists")
+                exit()
 lora_manager = LoRAManager(
     lora_paths, pipe
 )
