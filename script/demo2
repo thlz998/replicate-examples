@@ -13,29 +13,25 @@ qrImage = Image.open('k0a1a.png')
 seed = 1383557390
 
 model_key_base_safetensors = "./weights-cache/models/revAnimated_v122.safetensors"
-print("11111----------------------------")
 pipe = StableDiffusionPipeline.from_single_file(
         model_key_base_safetensors,
         torch_dtype=torch.float16,
+        resume_download=False,
         cache_dir=CACHE_DIR).to("cuda")
-print("22222----------------------------")
 
 components = pipe.components
-print("33333----------------------------")
 
 controlnet_qr_pattern = ControlNetModel.from_pretrained(
         "Nacholmo/controlnet-qr-pattern",  
         torch_dtype=torch.float16,
         force_download=False,
         cache_dir=CACHE_DIR).to("cuda")
-print("44444----------------------------")
 
 controlnet_qr_monster = ControlNetModel.from_pretrained(
         "monster-labs/control_v1p_sd15_qrcode_monster", 
         torch_dtype=torch.float16,
         force_download=False,
         cache_dir=CACHE_DIR).to("cuda")
-print("55555----------------------------")
 
 components["controlnet"] = [controlnet_qr_monster, controlnet_qr_pattern]
 # vae (FlaxAutoencoderKL) — 变分自编码器（VAE）模型，用于将图像编码和解码为潜在表示形式。
@@ -48,11 +44,9 @@ components["controlnet"] = [controlnet_qr_monster, controlnet_qr_pattern]
 # feature_extractor(CLIPFeatureExtractor)-从生成图片中提取特征并作为safety_checker输入使用的模型。
 
 pipe = StableDiffusionControlNetPipeline(**components).to("cuda")
-print("66666----------------------------")
 
 lora_model_file = './weights-cache/Lora/blindbox_v1_mix.safetensors'
 pipe.load_lora_weights(lora_model_file, cache_dir=CACHE_DIR)
-print("77777----------------------------")
 
 pipe = pipe.to("cuda", torch.float16)
 
