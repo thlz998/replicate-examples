@@ -69,5 +69,7 @@ image = pipe(
         # control_image=[control_image, control_image],
         # guidance_scale=float(guidance_scale),
         # strength=float(strength),
+        control_guidance_start=[0.3, 0],
+        control_guidance_end=[0.7, 1]
         ).images[0]
 image.save("output.png")
