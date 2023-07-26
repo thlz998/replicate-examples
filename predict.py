@@ -104,12 +104,8 @@ class Predictor(BasePredictor):
         pipe.scheduler.set_timesteps(num_inference_steps)
 
         out = pipe(
-
-            image=control_image,
-            control_image=[control_image, control_image],
             width=512,
             height=512,
-
             prompt=[prompt] * batch_size,
             negative_prompt=[negative_prompt] * batch_size,
             image=control_image,
