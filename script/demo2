@@ -12,7 +12,7 @@ sys.path.append(".")
 
 seed = 1383557390
 
-model_key_base_safetensors = "./weights-cache/models.revAnimated_v122.safetensors"
+model_key_base_safetensors = "./weights-cache/models/revAnimated_v122.safetensors"
 
 pipe = StableDiffusionPipeline.from_single_file(model_key_base_safetensors, torch_dtype=torch.float16)
 
