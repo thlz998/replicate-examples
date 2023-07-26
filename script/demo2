@@ -20,7 +20,7 @@ pipe = StableDiffusionPipeline.from_single_file(
         cache_dir=CACHE_DIR).to("cuda")
 
 lora_model_file = './weights-cache/Lora/blindbox_v1_mix.safetensors'
-pipe.load_lora_weights(lora_model_file, cache_dir=CACHE_DIR).to("cuda")
+pipe.load_lora_weights(lora_model_file, cache_dir=CACHE_DIR)
 
 pipe = pipe.to("cuda", torch.float16)
 
