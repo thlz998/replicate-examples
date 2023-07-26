@@ -50,6 +50,8 @@ for path in lora_paths:
         if not os.path.exists(path):
                 print("lora file not exists")
                 exit()
+        else:
+                print("lora file exists", path)
 lora_manager = LoRAManager(
     lora_paths, pipe
 )
