@@ -69,7 +69,7 @@ generator=generator,
 image=[qrImage, qrImage],
 controlnet_conditioning_scale=[1.0, 0.3],
 control_guidance_start=[0.2, 0],
-control_guidance_end=[0.85, 1]
+control_guidance_end=[0.9, 1]
 ).images[0]
 
 images.save(f'output.png')
