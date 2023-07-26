@@ -42,7 +42,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 # 加载lora
 lora_scales = [1.0, 0.6]  # 与lora_paths一一对应的scale值
 print("11111----------------------------")
-lora_paths=["tmpan_f4msxcaravaggio.safetensors", "tmpan_f4msxcaravaggio.safetensors"]
+lora_paths=["weights-cache/Lora/tmpan_f4msxcaravaggio.safetensors", "weights-cache/Lora/tmpan_f4msxcaravaggio.safetensors"]
 print("22222----------------------------")
 
 lora_manager = LoRAManager(lora_paths, pipe)
