@@ -1,33 +1,49 @@
 #!/usr/bin/env python3
 import sys
 from huggingface_hub import login
-import diffusers
 import torch
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, StableDiffusionPipeline, EulerDiscreteScheduler
+# from lora_diffusion import LoRAManager
+from PIL import Image
 
+CACHE_DIR = "weights-cache"
 sys.path.append(".")
+qrImage = Image.open('k0a1a.png')
 
-from predict import CACHE_DIR
+seed = 1383557390
 
-login(token="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")
-qrPatternControlnet = diffusers.ControlNetModel.from_pretrained(
-    "Nacholmo/controlnet-qr-pattern",
-    torch_dtype=torch.float16,
-    cache_dir=CACHE_DIR
-)
-cannyControlnet = diffusers.ControlNetModel.from_pretrained(
-    "lllyasviel/sd-controlnet-canny",
-    torch_dtype=torch.float16,
-    cache_dir=CACHE_DIR
-)
+model_key_base_safetensors = "./weights-cache/models/revAnimated_v122.safetensors"
+pipe = StableDiffusionPipeline.from_single_file(
+        model_key_base_safetensors,
+        torch_dtype=torch.float16,
+        cache_dir=CACHE_DIR).to("cuda")
 
-pipe = diffusers.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
-    "gsdf/Counterfeit-V2.5",
-    controlnet=[qrPatternControlnet, cannyControlnet],
-    safety_checker=None,
-    torch_dtype=torch.float16,
-    cache_dir=CACHE_DIR,
-).to("cuda")
-pipe.unet.load_attn_procs("sayakpaul/sd-model-finetuned-lora-t4", cache_dir=CACHE_DIR)
-pipe.scheduler = diffusers.DPMSolverMultistepScheduler.from_config(
-    pipe.scheduler.config, use_karras=True, algorithm_type="sde-dpmsolver++", cache_dir=CACHE_DIR
-)
+components = pipe.components
+
+controlnet_qr_pattern = ControlNetModel.from_pretrained(
+        "Nacholmo/controlnet-qr-pattern",  
+        torch_dtype=torch.float16,
+        force_download=False,
+        cache_dir=CACHE_DIR).to("cuda")
+
+controlnet_qr_monster = ControlNetModel.from_pretrained(
+        "monster-labs/control_v1p_sd15_qrcode_monster", 
+        torch_dtype=torch.float16,
+        force_download=False,
+        cache_dir=CACHE_DIR).to("cuda")
+
+components["controlnet"] = [controlnet_qr_monster, controlnet_qr_pattern]
+# vae (FlaxAutoencoderKL) — 变分自编码器（VAE）模型，用于将图像编码和解码为潜在表示形式。
+# text_encoder (FlaxCLIPTextModel) — 冻结的文本编码器。Stable Diffusion使用CLIP的文本部分，特别是clip-vit-large-patch14变体。
+# tokenizer (CLIPTokenizer) — 类CLIPTokenizer的标记器。
+# unet (FlaxUNet2DConditionModel) — 有条件U-Net架构，用于去噪编码后的图像潜在表示形式。
+# controlnet (FlaxControlNetModel）— 在去噪过程中为unet提供额外的调节能力。
+# scheduler (SchedulerMixin) — 调度程序与unet一起使用以去噪编码后的图像潜在表示形式。可以是以下之一： FlaxDDIMScheduler、FlaxLMSDiscreteScheduler、FlaxPNDMScheduler或者 FlaxDPMSolverMultistepScheduler.
+# safety_checker(FlaxStableDiffusionSafetyChecker)—分类模块，估计生成图片是否可能被认为具有冒犯性或有害性。请参阅模型卡片了解详情。
+# feature_extractor(CLIPFeatureExtractor)-从生成图片中提取特征并作为safety_checker输入使用的模型。
+
+pipe = StableDiffusionControlNetPipeline(**components).to("cuda")
+
+lora_model_file = './weights-cache/Lora/blindbox_v1_mix.safetensors'
+pipe.load_lora_weights(lora_model_file, cache_dir=CACHE_DIR)
+pipe = pipe.to("cuda", torch.float16)
