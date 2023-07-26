@@ -9,6 +9,7 @@ from PIL import Image
 
 CACHE_DIR = "weights-cache"
 sys.path.append(".")
+qrImage = Image.open('k0a1a.png')
 
 seed = 1383557390
 
@@ -49,10 +50,13 @@ pipe.scheduler = scheduler
 pipe.scheduler.set_timesteps(num_inference_steps)
 
 images = pipe(
-prompt=[prompt], 
-negative_prompt=[negative_prompt],
+prompt=prompt, 
+negative_prompt=negative_prompt,
 guidance_scale=guidance_scale,
 num_inference_steps=num_inference_steps,
-generator=generator).images
+generator=generator,
+image=[qrImage],
+controlnet_conditioning_scale=[1.0],
+).images
 
 images[0].save(f'output.png')
