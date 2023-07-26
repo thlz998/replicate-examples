@@ -37,10 +37,6 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
         cache_dir=CACHE_DIR,
 ).to("cuda")
 
-# cpu卸载以节省内存，需要加速>=0.17.0
-pipe.enable_model_cpu_offload() 
-
-generator = torch.Generator(device='cuda').manual_seed(12345)
 
 # 加载lora
 # lora_scales = [1.0, 0.6]  # 与lora_paths一一对应的scale值
@@ -54,6 +50,10 @@ prompt = "<1>,<2>,(masterpiece),(best quality),(ultra-detailed), (full body:1.2)
 print("----------------------------------")
 print(prompt)
 print("----------------------------------")
+
+generator = torch.Generator(device='cuda').manual_seed(12345)
+# cpu卸载以节省内存，需要加速>=0.17.0
+pipe.enable_model_cpu_offload() 
 image = pipe(
         image=[qrImage],
         width=512,
