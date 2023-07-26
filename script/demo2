@@ -20,13 +20,18 @@ pipe = StableDiffusionPipeline.from_single_file(
         cache_dir=CACHE_DIR).to("cuda")
 
 components = pipe.components
-# "Nacholmo/controlnet-qr-pattern", 
+
+controlnet_qr_pattern = ControlNetModel.from_pretrained(
+        "Nacholmo/controlnet-qr-pattern",  
+        torch_dtype=torch.float16,
+        cache_dir=CACHE_DIR).to("cuda")
+
 controlnet_qr_monster = ControlNetModel.from_pretrained(
         "monster-labs/control_v1p_sd15_qrcode_monster", 
         torch_dtype=torch.float16,
         cache_dir=CACHE_DIR).to("cuda")
 
-components["controlnet"] = [controlnet_qr_monster, controlnet_qr_monster]
+components["controlnet"] = [controlnet_qr_pattern, controlnet_qr_monster]
 # vae (FlaxAutoencoderKL) — 变分自编码器（VAE）模型，用于将图像编码和解码为潜在表示形式。
 # text_encoder (FlaxCLIPTextModel) — 冻结的文本编码器。Stable Diffusion使用CLIP的文本部分，特别是clip-vit-large-patch14变体。
 # tokenizer (CLIPTokenizer) — 类CLIPTokenizer的标记器。
@@ -62,7 +67,7 @@ guidance_scale=guidance_scale,
 num_inference_steps=num_inference_steps,
 generator=generator,
 image=[qrImage, qrImage],
-controlnet_conditioning_scale=[1.0, 1.0],
+controlnet_conditioning_scale=[1.0, 0.3],
 control_guidance_start=[0.2, 0],
 control_guidance_end=[0.85, 1]
 ).images[0]
