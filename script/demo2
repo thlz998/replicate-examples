@@ -21,6 +21,13 @@ pipe = StableDiffusionPipeline.from_single_file(
 
 components = pipe.components
 
+
+controlnet_qr = ControlNetModel.from_pretrained(
+        "Nacholmo/controlnet-qr-pattern", 
+        torch_dtype=torch.float16,
+        cache_dir=CACHE_DIR).to("cuda")
+
+components["controlnet"] = [controlnet_qr]
 pipe = StableDiffusionControlNetPipeline(**components).to("cuda")
 
 lora_model_file = './weights-cache/Lora/blindbox_v1_mix.safetensors'
