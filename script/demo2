@@ -57,6 +57,8 @@ num_inference_steps=num_inference_steps,
 generator=generator,
 image=[qrImage, qrImage],
 controlnet_conditioning_scale=[1.0, 1.0],
+control_guidance_start=[0.3, 0],
+control_guidance_end=[0.7, 1]
 ).images[0]
 
 images.save(f'output.png')
